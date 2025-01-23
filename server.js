@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 
 import storyRouter from './routes/storyRoute.js'; 
+import { VerifyGoogleAuthIdToken } from './controllers/authController.js';
+import authRouter from './routes/authRoute.js';
 
 dotenv.config();
 
@@ -14,8 +16,10 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use(cors());
+
+app.use('',authRouter);   
 app.use('',storyRouter);   
- 
+
 mongoose.connect(process.env.MongoDBString, { 
   dbName: process.env.DB_NAME,  
   useNewUrlParser: true,

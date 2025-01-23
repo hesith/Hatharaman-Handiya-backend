@@ -1,6 +1,6 @@
 import Story from '../models/storyModel.js';
 
-export async function getStories(req, res) { 
+export async function GetStories(req, res) { 
     await Story.find()
     .then((stories) => {
         res.json(stories);
@@ -9,9 +9,10 @@ export async function getStories(req, res) {
     });
 }
 
-export async function createStory(req, res) {
+export async function CreateStory(req, res) {
     const story = new Story(req.body);
     console.log(story);
+    
     await story.save().then(() => {
         res.status(201).send(story);
     }).catch((err) => {
