@@ -6,12 +6,14 @@ import bodyParser from 'body-parser';
 
 import storyRouter from './routes/storyRoute.js'; 
 import authRouter from './routes/authRoute.js';
+import PingServer from './utilities/PingServer.js';
 
 dotenv.config();
 
 const app = express();
 
 const port = process.env.PORT;   
+PingServer();
 
 app.use(bodyParser.json());
 app.use(cors());
