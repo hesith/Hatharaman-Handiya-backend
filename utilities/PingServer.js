@@ -1,10 +1,18 @@
-import exec from 'child_process';
+import axios from 'axios';
+
 
 export default function PingServer() {
+    const serverURL = process.env.SERVER_URL; 
+ 
     setInterval(async () => {
-        exec.exec(`ping ${process.env.SERVER_URL.split('//')[1]}` , (err, stdout, stderr)=>{
-            console.log(stdout)
-        })
+        try{
+            console.log(`Pinging the server ${serverURL} at`, new Date().toLocaleString());
+            await axios.get(serverURL);
+        }
+        catch(e){ 
+            console.log(`Server ${serverURL} is probably down at`, new Date().toLocaleString());     
+        }
+         
     }, 840000);
 }
 

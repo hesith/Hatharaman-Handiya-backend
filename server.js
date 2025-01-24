@@ -18,6 +18,7 @@ PingServer();
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get('/', (req,res) => {res.status(200).send()});
 app.use('',authRouter);   
 app.use('',storyRouter);   
 
