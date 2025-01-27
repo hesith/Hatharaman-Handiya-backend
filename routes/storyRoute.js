@@ -6,6 +6,7 @@ const storyRouter = express.Router();
 const baseRoute = "/stories";
 
 storyRouter.get(baseRoute, GetStories);
+storyRouter.get(baseRoute+'/:pageNo', GetStories);
 storyRouter.post(baseRoute, CreateStory);
 
 

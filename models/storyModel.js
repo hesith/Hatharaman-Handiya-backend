@@ -2,7 +2,11 @@ import mongoose from "mongoose";
 
 const storySchema = new mongoose.Schema({
     _id: {
-        type: Number,
+        type: String,
+        required: true
+    },
+    userId: {
+        type: String,
         required: true
     },
     title: {
@@ -11,6 +15,13 @@ const storySchema = new mongoose.Schema({
     },
     content: {
         type: String,
+        required: true
+    },
+    timestamp: {
+        type: Date
+    },
+    statusId: {
+        type: Number
     }
 }, { collection: "stories" });
 

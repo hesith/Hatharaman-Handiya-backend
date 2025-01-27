@@ -7,8 +7,10 @@ import bodyParser from 'body-parser';
 import storyRouter from './routes/storyRoute.js'; 
 import authRouter from './routes/authRoute.js';
 import PingServer from './utilities/PingServer.js';
+import StoryCardView from './views/storyCardView.js';
 
 dotenv.config();
+var database = null;
 
 const app = express();
 
@@ -26,8 +28,11 @@ mongoose.connect(process.env.MongoDBString, {
   dbName: process.env.DB_NAME,  
   useNewUrlParser: true,
   useUnifiedTopology: true})
-.then(() => {
-
+.then(async() => {
+  
+  await StoryCardView(mongoose.connection.db);
+  database = mongoose.connection.db;
+  
   console.log("Connected to MongoDB 🚀");
   app.listen(port, () => console.log(`Server running on port ${port} 🔥`)); 
 
@@ -36,3 +41,4 @@ mongoose.connect(process.env.MongoDBString, {
   console.log("Failed to connect to MongoDB 😢", err);    
 });
 
+export const getDb = () => database;
