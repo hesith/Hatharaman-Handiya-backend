@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import storyRouter from './routes/storyRoute.js'; 
 import authRouter from './routes/authRoute.js';
 import PingServer from './utilities/PingServer.js';
-import StoryCardView from './views/storyCardView.js';
+import StoryCardView from './views/StoryCardView.js';
 
 dotenv.config();
 var database = null;
