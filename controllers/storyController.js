@@ -30,12 +30,8 @@ export async function CreateStory(req, res) {
     try
     {
         const story = new Story(req.body);
-        story.timestamp = new Date(
-            new Date().setHours(
-              new Date().getHours() + 5.30
-            )
-          );
-          
+        story.timestamp = new Date();
+
         story.statusId = 0;
                 
         await story.save().then(() => {
