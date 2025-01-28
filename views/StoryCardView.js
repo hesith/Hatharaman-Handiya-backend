@@ -30,7 +30,7 @@ export default async function StoryCardView (db)  {
               userId: 1,
               title: 1,
               timestamp: 1,
-              status: 1,
+              statusId: 1,
               "userDetails.picture": 1,
             },
           },

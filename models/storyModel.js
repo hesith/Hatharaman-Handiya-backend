@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 const storySchema = new mongoose.Schema({
     _id: {
-        type: String,
-        required: true
+        type: Number
     },
     userId: {
         type: String,
