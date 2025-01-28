@@ -30,11 +30,14 @@ export async function CreateStory(req, res) {
     try
     {
         const story = new Story(req.body);
-        story.timestamp = new Date();
+        story.timestamp = new Date(
+            new Date().setHours(
+              new Date().getHours() + 5.30
+            )
+          );
+          
         story.statusId = 0;
-        
-        console.log(story);
-        
+                
         await story.save().then(() => {
             res.status(201).send(story);
         }).catch((err) => {
