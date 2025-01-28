@@ -13,7 +13,7 @@ export async function GetStories(req, res) {
             pageNo = parseInt(req.params.pageNo)
         }
 
-        let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments())/limit)
+        let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({statusId: PostStatus.APPROVED}))/limit)
 
         await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED}).skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
