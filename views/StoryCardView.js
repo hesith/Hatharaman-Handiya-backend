@@ -34,7 +34,12 @@ export default async function StoryCardView (db)  {
               "userDetails.picture": 1,
             },
           },
-        ],
+          {
+            $sort: {                      // Sorting by timestamp (ascending)
+              timestamp: -1,             // Change to 1 for ascending
+            },
+          }
+        ], 
       });
   
       console.log("View 'StoryCard' created successfully.");

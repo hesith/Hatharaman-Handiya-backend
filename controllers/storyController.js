@@ -16,6 +16,7 @@ export async function GetStories(req, res) {
 
         await getDb().collection('StoryCard').find().skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
+            stories.sort()
             let result = {"pageCount": pageCount, "stories": stories}
             res.json(result);
         }).catch((err) => {
