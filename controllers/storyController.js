@@ -4,7 +4,7 @@ import {getDb} from '../server.js';
 export async function GetStories(req, res) { 
     try
     {
-        const limit = 5;
+        const limit = 30;
         let pageNo = 1;
 
         if(req.params.pageNo!=undefined)
@@ -12,10 +12,12 @@ export async function GetStories(req, res) {
             pageNo = parseInt(req.params.pageNo)
         }
 
+        let pageCount = Math.round((await getDb().collection('StoryCard').countDocuments())/limit)
+
         await getDb().collection('StoryCard').find().skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
-            console.log(stories)
-            res.json(stories);
+            let result = {"pageCount": pageCount, "stories": stories}
+            res.json(result);
         }).catch((err) => {
             res.send(err); 
         });
