@@ -41,7 +41,6 @@ export async function GetStoryById(req, res) {
 
         await getDb().collection('Story').findOne({_id: id})
         .then((story) => {
-            console.log(story)
             res.json(story);
         }).catch((err) => {
             res.send(err); 
@@ -112,7 +111,7 @@ export async function CreateStory(req, res) {
         story.timestamp = new Date();
         story.statusId = PostStatus.PENDING;
                 
-        await story.save().then(() => {
+        await story.replaceOne( story, {upsert: true}).then(() => {
             res.status(201).send(story);
         }).catch((err) => {
             res.status(400)
