@@ -86,19 +86,29 @@ export async function GetMyPosts(req, res) {
 export async function CreateStory(req, res) {
     try
     {
-        const story = new Story(req.body);
+        const story = new Story(req.body.data);
 
-        let max_id = await getDb().collection('stories').find().sort({ _id: -1 }).limit(1).toArray();
 
-        if(max_id==undefined)
+        if(req.body.id!=null)
         {
-            max_id = 0;
-        }
-        else{
-            max_id = max_id[0]._id
+            story._id = req.body.id;
+        }   
+        else
+        {
+            let max_id = await getDb().collection('stories').find().sort({ _id: -1 }).limit(1).toArray();
+
+            if(max_id==undefined)
+            {
+                max_id = 0;
+            }
+            else
+            {
+                max_id = max_id[0]._id
+            }
+
+            story._id = max_id+1;
         }
 
-        story._id = max_id+1;
         story.timestamp = new Date();
         story.statusId = PostStatus.PENDING;
                 
@@ -117,22 +127,29 @@ export async function CreateStory(req, res) {
 export async function CreateDraft(req, res) {
     try
     {
-        const story = new Story(req.body);
+        const story = new Story(req.body.data);
 
-        let max_id = await getDb().collection('stories').find().sort({ _id: -1 }).limit(1).toArray();
-
-        if(max_id==undefined)
+        if(req.body.id!=null)
         {
-            max_id = 0;
-        }
-        else{
-            max_id = max_id[0]._id
-        }
+            story._id = req.body.id;
+        }   
+        else
+        {
+            let max_id = await getDb().collection('stories').find().sort({ _id: -1 }).limit(1).toArray();
 
-        story._id = max_id+1;
+            if(max_id==undefined)
+            {
+                max_id = 0;
+            }
+            else
+            {
+                max_id = max_id[0]._id
+            }
 
+            story._id = max_id+1;
+        }
+        
         story.timestamp = new Date();
-
         story.statusId = PostStatus.DRAFT;
                 
         await story.save().then(() => {
