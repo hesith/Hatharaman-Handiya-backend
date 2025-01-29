@@ -8,6 +8,7 @@ import storyRouter from './routes/storyRoute.js';
 import authRouter from './routes/authRoute.js';
 import PingServer from './utilities/PingServer.js';
 import StoryCardView from './views/StoryCardView.js';
+import StoryView from './views/StoryView.js';
 
 dotenv.config();
 var database = null;
@@ -31,6 +32,8 @@ mongoose.connect(process.env.MongoDBString, {
 .then(async() => {
   
   await StoryCardView(mongoose.connection.db);
+  await StoryView(mongoose.connection.db);
+
   database = mongoose.connection.db;
   
   console.log("Connected to MongoDB 🚀");

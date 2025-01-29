@@ -29,6 +29,29 @@ export async function GetStories(req, res) {
     } 
 }
 
+export async function GetStoryById(req, res) { 
+    try
+    {
+        let id = parseInt(req.params.id);
+
+        if(id==undefined)
+        {
+            return;
+        }
+
+        await getDb().collection('Story').findOne({_id: id})
+        .then((story) => {
+            console.log(story)
+            res.json(story);
+        }).catch((err) => {
+            res.send(err); 
+        });
+    }
+    catch(e){
+        console.log(e);
+    } 
+}
+
 export async function GetMyPosts(req, res) { 
     try
     {
