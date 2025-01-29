@@ -15,9 +15,7 @@ export async function VerifyGoogleAuthIdToken(req, res) {
     })
     .then(async(success)=> {
         let payload = success.getPayload();
-        let userInDB = await User.findOne({email: payload.email}); 
 
-        if(userInDB == null) { 
             const user = new User({
                 _id: payload.sub,
                 name: payload.name,
@@ -29,14 +27,7 @@ export async function VerifyGoogleAuthIdToken(req, res) {
                 res.status(201).send(story);
             }).catch((err) => {
                 res.status(400)
-            });
-            // await user.save().then(() => {
-            //     console.log("New user saved to DB", user);
-            // }).catch((err) => {
-            //     console.log(err);
-            // });
-        }
-        res.status(200).json({message: "User authenticated successfully"}).send();  
+            });   
     })
     .catch((err) => {    
         console.log(err); 
