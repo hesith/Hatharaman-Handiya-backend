@@ -19,16 +19,22 @@ export async function VerifyGoogleAuthIdToken(req, res) {
 
         if(userInDB == null) { 
             const user = new User({
-                id: payload.sub,
+                _id: payload.sub,
                 name: payload.name,
                 email: payload.email,
                 picture: payload.picture
             });
-            await user.save().then(() => {
-                console.log("New user saved to DB", user);
+
+            await user.replaceOne( user, {upsert: true}).then(() => {
+                res.status(201).send(story);
             }).catch((err) => {
-                console.log(err);
+                res.status(400)
             });
+            // await user.save().then(() => {
+            //     console.log("New user saved to DB", user);
+            // }).catch((err) => {
+            //     console.log(err);
+            // });
         }
         res.status(200).json({message: "User authenticated successfully"}).send();  
     })
