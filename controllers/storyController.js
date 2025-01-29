@@ -148,11 +148,11 @@ export async function CreateDraft(req, res) {
 
             story._id = max_id+1;
         }
-        
+
         story.timestamp = new Date();
         story.statusId = PostStatus.DRAFT;
-                
-        await story.save().then(() => {
+             
+        await story.replaceOne( story, {upsert: true}).then(() => {
             res.status(201).send(story);
         }).catch((err) => {
             res.status(400)
