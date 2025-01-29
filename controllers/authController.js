@@ -24,7 +24,7 @@ export async function VerifyGoogleAuthIdToken(req, res) {
             });
 
             await user.replaceOne( user, {upsert: true}).then(() => {
-                res.status(201).send(story);
+                res.status(201).send(user);
             }).catch((err) => {
                 res.status(400)
             });   
