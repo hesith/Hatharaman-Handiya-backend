@@ -9,6 +9,7 @@ import authRouter from './routes/authRoute.js';
 import PingServer from './utilities/PingServer.js';
 import StoryCardView from './views/StoryCardView.js';
 import StoryView from './views/StoryView.js';
+import likesRouter from './routes/likesRoute.js';
 
 dotenv.config();
 var database = null;
@@ -23,7 +24,9 @@ app.use(cors());
 
 app.get('/', (req,res) => {res.status(200).send()});
 app.use('',authRouter);   
-app.use('',storyRouter);   
+app.use('',storyRouter); 
+app.use('',likesRouter);   
+
 
 mongoose.connect(process.env.MongoDBString, { 
   dbName: process.env.DB_NAME,  
