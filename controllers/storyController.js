@@ -26,8 +26,38 @@ export async function GetStories(req, res) {
     }
     catch(e){
         console.log(e);
+    } 
+}
+
+export async function GetMyPosts(req, res) { 
+    try
+    {
+        const limit = 30;
+        let pageNo = 1;
+
+
+        if(req.params.userId==undefined) {return};
+        
+        let id = req.params?.userId;
+
+        if(req.params.pageNo!=undefined)
+        {
+            pageNo = parseInt(req.params.pageNo)
+        }
+
+        let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({userId: id}))/limit)
+        await getDb().collection('StoryCard').find({userId: id}).skip((pageNo-1)*limit).limit(limit).toArray()
+        .then((stories) => {
+            stories.sort()
+            let result = {"pageCount": pageCount, "stories": stories}
+            res.json(result);
+        }).catch((err) => {
+            res.send(err); 
+        });
     }
-   
+    catch(e){
+        console.log(e);
+    } 
 }
 
 export async function CreateStory(req, res) {
