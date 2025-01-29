@@ -17,7 +17,7 @@ export default async function StoryCardView (db)  {
             $lookup: {
               from: "usersGoog",          // Collection to join
               localField: "userId",   // Field in orders
-              foreignField: "id",        // Field in customers
+              foreignField: "_id",        // Field in customers
               as: "userDetails",      // Joined data
             },
           },
