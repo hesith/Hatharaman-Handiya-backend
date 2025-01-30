@@ -110,7 +110,7 @@ export async function CreateStory(req, res) {
 
         story.timestamp = new Date();
         story.statusId = PostStatus.PENDING;
-                
+
         await story.replaceOne( story, {upsert: true}).then(() => {
             res.status(201).send(story);
         }).catch((err) => {

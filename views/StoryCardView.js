@@ -25,6 +25,14 @@ export default async function StoryCardView (db)  {
             $unwind: { path: "$userDetails", preserveNullAndEmptyArrays: true },
           },
           {
+            $lookup: {
+              from: "total_likes",       // Collection to join with
+              localField: "_id", // Field in 'orders' that holds an array of productIds
+              foreignField: "_id",    // Field in 'products' collection
+              as: "likesDetails"     // Output array field that will store the joined product data
+            }
+          },
+          {
             $project: {                  // Projection to include desired fields
               _id: 1,
               userId: 1,
@@ -32,6 +40,9 @@ export default async function StoryCardView (db)  {
               timestamp: 1,
               statusId: 1,
               "userDetails.picture": 1,
+              totalLikes: { 
+                $arrayElemAt: ["$likesDetails.likes", 0]  // Extract the first department name
+              }
             },
           },
           {
