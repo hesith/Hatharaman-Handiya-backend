@@ -7,17 +7,54 @@ export async function GetStories(req, res) {
     {
         const limit = 30;
         let pageNo = 1;
+        let likedArr=[];
 
         if(req.params.pageNo!=undefined)
         {
             pageNo = parseInt(req.params.pageNo)
         }
 
+        if(req.params.userId!=undefined)
+        {
+            let userId = req.params.userId;
+            likedArr = await getDb().collection('likes').find({userId:userId}).project({_id:0,storyId:1}).toArray();
+        }
+
         let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({statusId: PostStatus.APPROVED}))/limit)
+
 
         await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED}).skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
-            stories.sort()
+
+            if(likedArr.length>0){
+                if(likedArr.length>stories.length)
+                {
+                    for(let s= 0; s<stories.length ; s++){
+                        for(let ls= 0; ls<likedArr.length ; ls++)
+                        {
+                            if(stories[s]._id==likedArr[ls].storyId){
+                                stories[s].liked = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for(let ls= 0; ls<likedArr.length ; ls++)
+                        for(let s= 0; s<stories.length ; s++){
+                        {
+                            if(stories[s]._id==likedArr[ls].storyId){
+                                stories[s].liked = true;
+                                break;
+                            }
+                        }
+                    }
+                }          
+            }
+
+            stories.sort();
+
             let result = {"pageCount": pageCount, "stories": stories}
             res.json(result);
         }).catch((err) => {
