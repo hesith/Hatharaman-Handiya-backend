@@ -33,6 +33,14 @@ export default async function StoryCardView (db)  {
             }
           },
           {
+            $lookup: {
+              from: "total_ratings",       // Collection to join with
+              localField: "_id", // Field in 'orders' that holds an array of productIds
+              foreignField: "_id",    // Field in 'products' collection
+              as: "ratingsDetails"     // Output array field that will store the joined product data
+            }
+          },
+          {
             $project: {                  // Projection to include desired fields
               _id: 1,
               userId: 1,
@@ -42,6 +50,9 @@ export default async function StoryCardView (db)  {
               "userDetails.picture": 1,
               totalLikes: { 
                 $arrayElemAt: ["$likesDetails.likes", 0]  // Extract the first department name
+              },
+              avgRatings: { 
+                $arrayElemAt: ["$ratingsDetails.avgRating", 0]  // Extract the first department name
               }
             },
           },

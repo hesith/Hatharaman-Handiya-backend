@@ -8,6 +8,7 @@ export async function GetStories(req, res) {
         const limit = 30;
         let pageNo = 1;
         let likedArr=[];
+        let ratedArr=[];
 
         if(req.params.pageNo!=undefined)
         {
@@ -18,6 +19,7 @@ export async function GetStories(req, res) {
         {
             let userId = req.params.userId;
             likedArr = await getDb().collection('likes').find({userId:userId}).project({_id:0,storyId:1}).toArray();
+            ratedArr = await getDb().collection('ratings').find({userId:userId}).project({_id:0,storyId:1,rate:1}).toArray();
         }
 
         let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({statusId: PostStatus.APPROVED}))/limit)
@@ -26,32 +28,28 @@ export async function GetStories(req, res) {
         await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED}).skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
 
-            if(likedArr.length>0){
-                if(likedArr.length>stories.length)
-                {
+
                     for(let s= 0; s<stories.length ; s++){
-                        for(let ls= 0; ls<likedArr.length ; ls++)
-                        {
-                            if(stories[s]._id==likedArr[ls].storyId){
-                                stories[s].liked = true;
-                                break;
-                            }
+                        if(likedArr.length>0){
+                            for(let ls= 0; ls<likedArr.length ; ls++)
+                                {
+                                    if(stories[s]._id==likedArr[ls].storyId){
+                                        stories[s].liked = true;
+                                        break;
+                                    }
+                                }
                         }
+                        
+                        if(ratedArr.length>0){
+                            for(let rs= 0; rs<ratedArr.length ; rs++)
+                                {
+                                    if(stories[s]._id==ratedArr[rs].storyId){
+                                        stories[s].rated = true;
+                                        break;
+                                    }
+                                }
+                        }        
                     }
-                }
-                else
-                {
-                    for(let ls= 0; ls<likedArr.length ; ls++)
-                        for(let s= 0; s<stories.length ; s++){
-                        {
-                            if(stories[s]._id==likedArr[ls].storyId){
-                                stories[s].liked = true;
-                                break;
-                            }
-                        }
-                    }
-                }          
-            }
 
             stories.sort();
 
