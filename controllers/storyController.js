@@ -44,7 +44,7 @@ export async function GetStories(req, res) {
                             for(let rs= 0; rs<ratedArr.length ; rs++)
                                 {
                                     if(stories[s]._id==ratedArr[rs].storyId){
-                                        stories[s].rated = true;
+                                        stories[s].rated = ratedArr[rs].rate;
                                         break;
                                     }
                                 }
