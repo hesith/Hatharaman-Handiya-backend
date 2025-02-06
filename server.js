@@ -11,6 +11,7 @@ import StoryCardView from './views/StoryCardView.js';
 import StoryView from './views/StoryView.js';
 import likesRouter from './routes/likesRoute.js';
 import ratingsRouter from './routes/ratingsRoute.js';
+import topRatedRouter from './routes/topRatedRoute.js';
 
 dotenv.config();
 var database = null;
@@ -27,7 +28,8 @@ app.get('/', (req,res) => {res.status(200).send()});
 app.use('',authRouter);   
 app.use('',storyRouter); 
 app.use('',likesRouter);   
-app.use('',ratingsRouter);   
+app.use('',ratingsRouter);  
+app.use('',topRatedRouter);   
 
 
 mongoose.connect(process.env.MongoDBString, { 
