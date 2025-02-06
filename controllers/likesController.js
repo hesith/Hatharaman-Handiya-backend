@@ -28,12 +28,6 @@ export async function ProcessLike(req, res) {
             });
         }
 
-        return
-        await likes.replaceOne( story, {upsert: true}).then(() => {
-            res.status(201).send(story);
-        }).catch((err) => {
-            res.status(400)
-        });
     }
     catch(e)
     {

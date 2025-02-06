@@ -10,6 +10,7 @@ import PingServer from './utilities/PingServer.js';
 import StoryCardView from './views/StoryCardView.js';
 import StoryView from './views/StoryView.js';
 import likesRouter from './routes/likesRoute.js';
+import ratingsRouter from './routes/ratingsRoute.js';
 
 dotenv.config();
 var database = null;
@@ -26,6 +27,7 @@ app.get('/', (req,res) => {res.status(200).send()});
 app.use('',authRouter);   
 app.use('',storyRouter); 
 app.use('',likesRouter);   
+app.use('',ratingsRouter);   
 
 
 mongoose.connect(process.env.MongoDBString, { 
