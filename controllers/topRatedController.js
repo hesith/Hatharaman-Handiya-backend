@@ -6,7 +6,7 @@ export async function GetTopRatedStories(req, res) {
     {
         const limit = 99;
 
-        await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED}).project({timestamp:0}).sort({avgRatings:'-1'}).limit(limit).toArray()
+        await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED, totalLikes: { $gt: 9 }}).project({timestamp:0}).sort({avgRatings:'-1'}).limit(limit).toArray()
         .then((stories) => {
             res.json(stories);
         }).catch((err) => {
