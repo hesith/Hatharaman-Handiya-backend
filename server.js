@@ -12,6 +12,7 @@ import StoryView from './views/StoryView.js';
 import likesRouter from './routes/likesRoute.js';
 import ratingsRouter from './routes/ratingsRoute.js';
 import topRatedRouter from './routes/topRatedRoute.js';
+import contributorRouter from './routes/contributorRoute.js';
 
 dotenv.config();
 var database = null;
@@ -30,6 +31,7 @@ app.use('',storyRouter);
 app.use('',likesRouter);   
 app.use('',ratingsRouter);  
 app.use('',topRatedRouter);   
+app.use('',contributorRouter);   
 
 
 mongoose.connect(process.env.MongoDBString, { 
