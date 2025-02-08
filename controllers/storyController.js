@@ -2,6 +2,8 @@ import Story from '../models/storyModel.js';
 import {getDb} from '../server.js'; 
 import { PostStatus } from '../Enums.js';
 
+const RESTRICTED_USERS = []
+
 export async function GetStories(req, res) { 
     try
     {
@@ -146,11 +148,17 @@ export async function CreateStory(req, res) {
         story.timestamp = new Date();
         story.statusId = PostStatus.PENDING;
 
-        await story.replaceOne( story, {upsert: true}).then(() => {
-            res.status(201).send(story);
-        }).catch((err) => {
-            res.status(400)
-        });
+        if(RESTRICTED_USERS.find(userId => userId==story.userId)==undefined){
+            await story.replaceOne( story, {upsert: true}).then(() => {
+                res.status(201).send(story);
+            }).catch((err) => {
+                res.status(400).send();
+            });
+        }
+        else
+        {
+            res.status(403).send();
+        }
     }
     catch(e)
     {
@@ -186,11 +194,17 @@ export async function CreateDraft(req, res) {
         story.timestamp = new Date();
         story.statusId = PostStatus.DRAFT;
              
-        await story.replaceOne( story, {upsert: true}).then(() => {
-            res.status(201).send(story);
-        }).catch((err) => {
-            res.status(400)
-        });
+        if(RESTRICTED_USERS.find(userId => userId==story.userId)==undefined){
+            await story.replaceOne( story, {upsert: true}).then(() => {
+                res.status(201).send(story);
+            }).catch((err) => {
+                res.status(400)
+            });
+        }
+        else
+        {
+            res.status(403).send();
+        }
     }
     catch(e)
     {

@@ -9,10 +9,12 @@ import authRouter from './routes/authRoute.js';
 import PingServer from './utilities/PingServer.js';
 import StoryCardView from './views/StoryCardView.js';
 import StoryView from './views/StoryView.js';
+import CommentsView from './views/CommentsView.js';
 import likesRouter from './routes/likesRoute.js';
 import ratingsRouter from './routes/ratingsRoute.js';
 import topRatedRouter from './routes/topRatedRoute.js';
 import contributorRouter from './routes/contributorRoute.js';
+import commentsRouter from './routes/commentsRoute.js';
 
 dotenv.config();
 var database = null;
@@ -30,6 +32,7 @@ app.use('',authRouter);
 app.use('',storyRouter); 
 app.use('',likesRouter);   
 app.use('',ratingsRouter);  
+app.use('',commentsRouter);   
 app.use('',topRatedRouter);   
 app.use('',contributorRouter);   
 
@@ -42,6 +45,7 @@ mongoose.connect(process.env.MongoDBString, {
   
   await StoryCardView(mongoose.connection.db);
   await StoryView(mongoose.connection.db);
+  await CommentsView(mongoose.connection.db);
 
   database = mongoose.connection.db;
   

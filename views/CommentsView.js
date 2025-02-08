@@ -1,17 +1,17 @@
 export default async function StoryView (db)  {
     try {
       // Drop existing view if it exists (optional, for updates)
-      const views = await db.listCollections({ name: "Story" }).toArray();
+      const views = await db.listCollections({ name: "Comments" }).toArray();
 
       if (views.length > 0) {
-        console.log("Dropping existing view: Story");
-        await db.collection("Story").drop();
+        console.log("Dropping existing view: Comments");
+        await db.collection("Comments").drop();
       }
   
       // Create the view
-      console.log("Creating view: Story");
-      await db.createCollection("Story", {
-        viewOn: "stories", // Source collection
+      console.log("Creating view: Comments");
+      await db.createCollection("Comments", {
+        viewOn: "comments", // Source collection
         pipeline: [
           {
             $lookup: {
@@ -27,12 +27,11 @@ export default async function StoryView (db)  {
           {
             $project: {                  // Projection to include desired fields
               _id: 1,
-              writerUserId: "$userId",
-              title: 1,
+              storyId: 1,
+              commentorUserId: "$userId",
               timestamp: 1,
-              statusId: 1,
-              content: 1,
-              "userDetails.picture": 1,
+              comment: 1,
+              commentorPicture: "$userDetails.picture"
             },
           },
           {
@@ -43,7 +42,7 @@ export default async function StoryView (db)  {
         ], 
       });
   
-      console.log("View 'Story' created successfully.");
+      console.log("View 'Comments' created successfully.");
     } catch (error) {
       console.error("Error creating view:", error);
     }
