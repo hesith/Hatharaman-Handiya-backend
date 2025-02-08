@@ -31,7 +31,8 @@ export default async function StoryView (db)  {
               commentorUserId: "$userId",
               timestamp: 1,
               comment: 1,
-              commentorPicture: "$userDetails.picture"
+              commentorPicture: "$userDetails.picture",
+              commentorName: "$userDetails.name"
             },
           },
           {
