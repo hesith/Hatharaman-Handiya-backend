@@ -4,6 +4,8 @@ import { PostStatus } from '../Enums.js';
 
 const RESTRICTED_USERS = []
 
+const ADMINISTRATOR_USERS = ["113241915717330144410"]
+
 export async function GetStories(req, res) { 
     try
     {
@@ -107,14 +109,30 @@ export async function GetMyPosts(req, res) {
         }
 
         let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({userId: id}))/limit)
-        await getDb().collection('StoryCard').find({userId: id}).skip((pageNo-1)*limit).limit(limit).toArray()
-        .then((stories) => {
-            stories.sort()
-            let result = {"pageCount": pageCount, "stories": stories}
-            res.json(result);
-        }).catch((err) => {
-            res.send(err); 
-        });
+
+        if(ADMINISTRATOR_USERS.find(userId => userId==id)==undefined)
+        {
+            await getDb().collection('StoryCard').find({userId: id}).skip((pageNo-1)*limit).limit(limit).toArray()
+            .then((stories) => {
+                stories.sort()
+                let result = {"pageCount": pageCount, "stories": stories}
+                res.json(result);
+            }).catch((err) => {
+                res.send(err); 
+            });
+        }
+        else
+        {
+            await getDb().collection('StoryCard').find().skip((pageNo-1)*limit).limit(limit).toArray()
+            .then((stories) => {
+                stories.sort()
+                let result = {"pageCount": pageCount, "stories": stories}
+                res.json(result);
+            }).catch((err) => {
+                res.send(err); 
+            });
+        }
+
     }
     catch(e){
         console.log(e);
