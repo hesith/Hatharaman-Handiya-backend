@@ -119,6 +119,36 @@ export async function GetMyPosts(req, res) {
     } 
 }
 
+export async function DeleteMyPostById(req, res) { 
+    try
+    {
+        if(req.params.userId==undefined || req.params.storyId==undefined) {return};
+
+        let userId = req.params?.userId;
+        let storyId = parseInt(req.params?.storyId);
+        
+        await getDb().collection('stories').deleteOne({_id: storyId, userId:userId})
+        .then((result) => {
+            if(result.deletedCount>0)
+            {
+                getDb().collection('likes').deleteMany({storyId: storyId})
+                getDb().collection('total_likes').deleteOne({_id: storyId})
+                getDb().collection('ratings').deleteMany({storyId: storyId})
+                getDb().collection('total_ratings').deleteOne({_id: storyId})
+                getDb().collection('comments').deleteMany({storyId: storyId})
+            }
+
+            res.status(200).send();
+
+        }).catch((err) => {
+            res.send(err); 
+        });
+    }
+    catch(e){
+        console.log(e);
+    } 
+}
+
 export async function CreateStory(req, res) {
     try
     {
