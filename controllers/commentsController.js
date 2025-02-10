@@ -41,6 +41,28 @@ export async function ProcessComment(req, res) {
     } 
 }
 
+export async function DeleteCommentById(req, res) { 
+    try
+    {
+        let id = parseInt(req.params.id);
+
+        if(id==undefined)
+        {
+            return;
+        }
+
+        await getDb().collection('comments').deleteOne({_id: id})
+        .then(() => {
+            res.status().send(200);
+        }).catch((err) => {
+            res.send(err); 
+        });
+    }
+    catch(e){
+        console.log(e);
+    } 
+}
+
 export async function GetCommentsByStoryId(req, res) { 
     try
     {
