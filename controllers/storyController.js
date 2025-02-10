@@ -30,6 +30,8 @@ export async function GetStories(req, res) {
         await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED}).skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
 
+                    let currTime = new Date();
+                    stories = stories.filter(story=> currTime > story.timestamp);
 
                     for(let s= 0; s<stories.length ; s++){
                         if(likedArr.length>0){
@@ -138,7 +140,7 @@ export async function DeleteMyPostById(req, res) {
                 getDb().collection('comments').deleteMany({storyId: storyId})
             }
 
-            res.status(200).send();
+            res.status().send(200);
 
         }).catch((err) => {
             res.send(err); 
