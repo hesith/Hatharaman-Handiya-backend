@@ -169,6 +169,34 @@ export async function DeleteMyPostById(req, res) {
     } 
 }
 
+export async function ChangePostStatusById(req, res) { 
+    try
+    {
+        if(req.params.userId==undefined || req.params.storyId==undefined || req.params.statusId==undefined) {return};
+
+        let privUserId = req.params?.userId;
+        let storyId = parseInt(req.params?.storyId);
+        let statusId = parseInt(req.params?.statusId);
+
+        if(ADMINISTRATOR_USERS.find(userId => userId==privUserId)!=undefined){
+            await getDb().collection('stories').updateOne({_id: storyId}, { $set: { statusId: statusId } })
+            .then(() => {
+                res.status().send(200);
+
+            }).catch((err) => {
+                res.send(err); 
+            });
+        }
+        else
+        {
+            res.status().send(401);
+        }
+    }
+    catch(e){
+        console.log(e);
+    } 
+}
+
 export async function CreateStory(req, res) {
     try
     {
