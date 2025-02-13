@@ -16,18 +16,27 @@ export async function VerifyGoogleAuthIdToken(req, res) {
     .then(async(success)=> {
         let payload = success.getPayload();
 
-            const user = new User({
+        const user = new User({
                 _id: payload.sub,
                 name: payload.name,
                 email: payload.email,
                 picture: payload.picture
             });
 
-            await user.replaceOne( user, {upsert: true}).then(() => {
+        let existingUser = await User.findOne({_id:user._id}) ;
+
+        if(existingUser==null){
+            await user.save().then(() => {
                 res.status(201).send(user);
             }).catch((err) => {
                 res.status(400)
-            });   
+            });
+        }
+        else
+        {
+            res.status(201).send(existingUser);
+        }
+              
     })
     .catch((err) => {    
         console.log(err); 
