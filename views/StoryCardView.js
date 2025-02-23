@@ -45,6 +45,7 @@ export default async function StoryCardView (db)  {
               _id: 1,
               userId: 1,
               title: 1,
+              image: 1,
               timestamp: 1,
               statusId: 1,
               "userDetails.picture": 1,
