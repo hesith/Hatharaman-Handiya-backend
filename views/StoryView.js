@@ -32,6 +32,7 @@ export default async function StoryView (db)  {
               timestamp: 1,
               statusId: 1,
               content: 1,
+              image: 1,
               "userDetails.picture": 1,
             },
           },
