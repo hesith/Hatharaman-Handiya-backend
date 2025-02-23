@@ -108,10 +108,11 @@ export async function GetMyPosts(req, res) {
             pageNo = parseInt(req.params.pageNo)
         }
 
-        let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({userId: id}))/limit)
 
         if(ADMINISTRATOR_USERS.find(userId => userId==id)==undefined)
         {
+            let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({userId: id}))/limit)
+
             await getDb().collection('StoryCard').find({userId: id}).skip((pageNo-1)*limit).limit(limit).toArray()
             .then((stories) => {
                 stories.sort()
@@ -123,6 +124,8 @@ export async function GetMyPosts(req, res) {
         }
         else
         {
+            let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments())/limit)
+
             await getDb().collection('StoryCard').find().skip((pageNo-1)*limit).limit(limit).toArray()
             .then((stories) => {
                 stories.sort()
