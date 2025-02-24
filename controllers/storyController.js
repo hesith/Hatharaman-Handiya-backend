@@ -226,6 +226,11 @@ export async function CreateStory(req, res) {
             story._id = max_id+1;
         }
 
+        if(story.image=='')
+        {
+            delete story.image;
+        }
+
         story.timestamp = new Date();
         story.statusId = PostStatus.PENDING;
 
