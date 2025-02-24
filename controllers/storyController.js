@@ -9,7 +9,7 @@ const ADMINISTRATOR_USERS = ["113241915717330144410"]
 export async function GetStories(req, res) { 
     try
     {
-        const limit = 30;
+        const limit = 20;
         let pageNo = 1;
         let likedArr=[];
         let ratedArr=[];
@@ -95,7 +95,7 @@ export async function GetStoryById(req, res) {
 export async function GetMyPosts(req, res) { 
     try
     {
-        const limit = 30;
+        const limit = 20;
         let pageNo = 1;
 
 
