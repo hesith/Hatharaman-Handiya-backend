@@ -228,7 +228,7 @@ export async function CreateStory(req, res) {
 
         if(story.image=='')
         {
-            delete story.image;
+            story.image = undefined;
         }
 
         story.timestamp = new Date();
