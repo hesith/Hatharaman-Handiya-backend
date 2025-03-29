@@ -202,9 +202,8 @@ export async function ChangePostStatusById(req, res) {
 
 export async function CreateStory(req, res) {
     try
-    {
+    {   
         const story = new Story(req.body.data);
-
 
         if(req.body.id!=null)
         {
@@ -228,7 +227,7 @@ export async function CreateStory(req, res) {
 
         if(story.image=='')
         {
-            story.image = await getDb().collection('stories').find({_id: story.id}).limit(1).toArray()[0]?.image;
+            story.image = (await getDb().collection('stories').findOne({_id: parseInt(story.id)}))?.image;
         }
 
         story.timestamp = new Date();
