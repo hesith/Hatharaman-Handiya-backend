@@ -228,7 +228,7 @@ export async function CreateStory(req, res) {
 
         if(story.image=='')
         {
-            story.image = await getDb().collection('stories').find({_id: story.id}).limit(1).toArray()[0].image;
+            story.image = await getDb().collection('stories').find({_id: story.id}).limit(1).toArray()[0]?.image;
         }
 
         story.timestamp = new Date();
