@@ -11,6 +11,7 @@ export async function GetStories(req, res) {
     {
         const limit = 20;
         let pageNo = 1;
+        let userId = undefined;
         let likedArr=[];
         let ratedArr=[];
 
@@ -21,15 +22,14 @@ export async function GetStories(req, res) {
 
         if(req.params.userId!=undefined)
         {
-            let userId = req.params.userId;
+            userId = req.params.userId;
             likedArr = await getDb().collection('likes').find({userId:userId}).project({_id:0,storyId:1}).toArray();
             ratedArr = await getDb().collection('ratings').find({userId:userId}).project({_id:0,storyId:1,rate:1}).toArray();
         }
 
         let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments({statusId: PostStatus.APPROVED}))/limit)
 
-
-        await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED}).skip((pageNo-1)*limit).limit(limit).toArray()
+        await getDb().collection('StoryCard').find({statusId: PostStatus.APPROVED, userId: userId ?? undefined}).skip((pageNo-1)*limit).limit(limit).toArray()
         .then((stories) => {
 
                     let currTime = new Date();
