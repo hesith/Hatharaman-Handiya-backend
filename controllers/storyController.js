@@ -20,7 +20,7 @@ export async function GetStories(req, res) {
             pageNo = parseInt(req.params.pageNo)
         }
 
-        if (userId != undefined) {
+        if (userId != undefined && isUserContentOnly) {
             likedArr = await getDb().collection('likes').find({ userId: userId }).project({ _id: 0, storyId: 1 }).toArray();
             ratedArr = await getDb().collection('ratings').find({ userId: userId }).project({ _id: 0, storyId: 1, rate: 1 }).toArray();
         }
@@ -31,7 +31,7 @@ export async function GetStories(req, res) {
 
         if (userId !== undefined && isUserContentOnly) {
             if (ADMINISTRATOR_USERS.find(id => id == userId) == undefined) {
-                query.userId = userId;
+                query = { userId: userId }
             }
         }
 
