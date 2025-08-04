@@ -10,7 +10,9 @@ export async function GetStories(req, res) {
     try {
         const limit = 20;
         let pageNo = 1;
-        let userId = undefined;
+        let userId = req.params?.userId;
+        let isUserContentOnly = req.path.includes('userContentOnly');
+
         let likedArr = [];
         let ratedArr = [];
 
@@ -18,8 +20,7 @@ export async function GetStories(req, res) {
             pageNo = parseInt(req.params.pageNo)
         }
 
-        if (req.params.userId != undefined) {
-            userId = req.params.userId;
+        if (userId != undefined) {
             likedArr = await getDb().collection('likes').find({ userId: userId }).project({ _id: 0, storyId: 1 }).toArray();
             ratedArr = await getDb().collection('ratings').find({ userId: userId }).project({ _id: 0, storyId: 1, rate: 1 }).toArray();
         }
@@ -28,7 +29,7 @@ export async function GetStories(req, res) {
             statusId: PostStatus.APPROVED,
         };
 
-        if (userId !== undefined) {
+        if (userId !== undefined && isUserContentOnly) {
             if (ADMINISTRATOR_USERS.find(id => id == userId) == undefined) {
                 query.userId = userId;
             }

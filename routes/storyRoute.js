@@ -8,6 +8,7 @@ const baseRoute = "/stories";
 storyRouter.get(baseRoute, GetStories);
 storyRouter.get(baseRoute+'/:pageNo', GetStories);
 storyRouter.get(baseRoute+'/:pageNo/loggedUser/:userId', GetStories);
+storyRouter.get(baseRoute+'/:pageNo/loggedUser/:userId/userContentOnly', GetStories);
 
 
 storyRouter.get(baseRoute+'/:userId/:pageNo', GetMyPosts);
