@@ -18,6 +18,7 @@ import commentsRouter from './routes/commentsRoute.js';
 import randomRouter from './routes/randomRoute.js';
 import libraryRouter from './routes/libraryRoute.js';
 import discoverRouter from './routes/discoverRoute.js';
+import purchasesRouter from './routes/purchasesRoute.js';
 
 dotenv.config();
 var database = null;
@@ -41,6 +42,7 @@ app.use('',contributorRouter);
 app.use('',randomRouter);
 app.use('',libraryRouter);
 app.use('',discoverRouter);
+app.use('',purchasesRouter);
 
 
 mongoose.connect(process.env.MongoDBString, { 
