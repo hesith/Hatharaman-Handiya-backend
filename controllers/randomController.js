@@ -17,7 +17,13 @@ export async function GetRandomStories(req, res) {
         const currTime = new Date();
 
         await getDb().collection('StoryCard').aggregate([
-            { $match: { statusId: PostStatus.APPROVED, timestamp: { $lte: currTime } } },
+            {
+                $match: {
+                    statusId: PostStatus.APPROVED,
+                    timestamp: { $lte: currTime },
+                    image: { $exists: true, $nin: [null, ''] },
+                },
+            },
             { $sample: { size: count } },
         ]).toArray()
             .then((stories) => {
