@@ -15,6 +15,9 @@ import ratingsRouter from './routes/ratingsRoute.js';
 import topRatedRouter from './routes/topRatedRoute.js';
 import contributorRouter from './routes/contributorRoute.js';
 import commentsRouter from './routes/commentsRoute.js';
+import randomRouter from './routes/randomRoute.js';
+import libraryRouter from './routes/libraryRoute.js';
+import discoverRouter from './routes/discoverRoute.js';
 
 dotenv.config();
 var database = null;
@@ -33,8 +36,11 @@ app.use('',storyRouter);
 app.use('',likesRouter);   
 app.use('',ratingsRouter);  
 app.use('',commentsRouter);   
-app.use('',topRatedRouter);   
-app.use('',contributorRouter);   
+app.use('',topRatedRouter);
+app.use('',contributorRouter);
+app.use('',randomRouter);
+app.use('',libraryRouter);
+app.use('',discoverRouter);
 
 
 mongoose.connect(process.env.MongoDBString, { 

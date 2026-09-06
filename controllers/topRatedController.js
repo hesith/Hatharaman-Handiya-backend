@@ -47,8 +47,55 @@ export async function GetTopRatedStories(req, res) {
     }
     catch(e){
         console.log(e);
-    } 
+    }
 }
 
+export async function GetTopRatedPage(req, res) {
+    try {
+        const limit = 20;
+        let pageNo = 1;
+        let likedArr = [];
+        let ratedArr = [];
+
+        if (req.params.pageNo != undefined) {
+            pageNo = parseInt(req.params.pageNo);
+        }
+
+        if (req.params.userId != undefined) {
+            let userId = req.params.userId;
+            likedArr = await getDb().collection('likes').find({ userId: userId }).project({ _id: 0, storyId: 1 }).toArray();
+            ratedArr = await getDb().collection('ratings').find({ userId: userId }).project({ _id: 0, storyId: 1, rate: 1 }).toArray();
+        }
+
+        const query = { statusId: PostStatus.APPROVED, totalLikes: { $gt: 9 } };
+
+        let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments(query)) / limit);
+
+        await getDb().collection('StoryCard').find(query).project({ timestamp: 0 }).sort({ avgRatings: -1 }).skip((pageNo - 1) * limit).limit(limit).toArray()
+            .then((stories) => {
+                for (let s = 0; s < stories.length; s++) {
+                    for (let ls = 0; ls < likedArr.length; ls++) {
+                        if (stories[s]._id == likedArr[ls].storyId) {
+                            stories[s].liked = true;
+                            break;
+                        }
+                    }
+                    for (let rs = 0; rs < ratedArr.length; rs++) {
+                        if (stories[s]._id == ratedArr[rs].storyId) {
+                            stories[s].rated = ratedArr[rs].rate;
+                            break;
+                        }
+                    }
+                }
+
+                res.json({ pageCount, stories });
+            }).catch((err) => {
+                res.send(err);
+            });
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
 
 
