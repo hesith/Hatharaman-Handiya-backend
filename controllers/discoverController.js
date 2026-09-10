@@ -29,7 +29,8 @@ export async function DiscoverStories(req, res) {
             query.title = { $regex: escapeRegex(q), $options: 'i' };
         }
 
-        let pageCount = Math.ceil((await getDb().collection('StoryCard').countDocuments(query)) / limit);
+        const totalCount = await getDb().collection('StoryCard').countDocuments(query);
+        let pageCount = Math.ceil(totalCount / limit);
 
         await getDb().collection('StoryCard').find(query).sort({ timestamp: -1 }).skip((pageNo - 1) * limit).limit(limit).toArray()
             .then((stories) => {
@@ -51,7 +52,7 @@ export async function DiscoverStories(req, res) {
                     }
                 }
 
-                res.json({ pageCount, stories });
+                res.json({ pageCount, totalCount, stories });
             }).catch((err) => {
                 res.send(err);
             });
